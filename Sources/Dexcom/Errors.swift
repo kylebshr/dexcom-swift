@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ErrorCode: String, Codable {
+public enum ErrorCode: String, Codable {
     case sessionIdNotFound = "SessionIdNotFound"
     case sessionNotValid = "SessionNotValid"
     case accountPasswordInvalid = "AccountPasswordInvalid"
@@ -15,9 +15,9 @@ enum ErrorCode: String, Codable {
     case invalidArgument = "InvalidArgument"
 }
 
-struct DexcomError: Codable, Error {
-    var code: ErrorCode
-    var message: String?
+public struct DexcomError: Codable, Error {
+    public var code: ErrorCode
+    public var message: String?
 
     enum CodingKeys: String, CodingKey {
         case code = "Code"
