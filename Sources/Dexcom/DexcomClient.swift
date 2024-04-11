@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum DexcomClientError: Error {
+    case failedToBuildURL
+    case noAccountID
+    case noSessionID
+}
+
 public class DexcomClient {
     private let username: String
     private let password: String
@@ -54,7 +60,7 @@ public class DexcomClient {
         let url = baseURL.appending(path: endpoint)
 
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            throw NSError()
+            throw DexcomClientError.failedToBuildURL
         }
 
         if let params {
@@ -64,7 +70,7 @@ public class DexcomClient {
         }
 
         guard let url = components.url else {
-            throw NSError()
+            throw DexcomClientError.failedToBuildURL
         }
 
         var request = URLRequest(url: url)
@@ -100,7 +106,7 @@ public class DexcomClient {
 
     private func getSessionID() async throws -> UUID {
         guard let accountID else {
-            throw NSError()
+            throw DexcomClientError.noAccountID
         }
 
         return try await post(
@@ -120,7 +126,7 @@ public class DexcomClient {
 
     private func validateSessionID() throws {
         if sessionID == nil {
-            throw NSError()
+            throw DexcomClientError.noSessionID
         }
     }
 
