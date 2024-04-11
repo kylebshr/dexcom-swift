@@ -17,4 +17,13 @@ public struct GlucoseReading: Codable {
         case trend = "Trend"
         case date = "WT"
     }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.value = try container.decode(Int.self, forKey: .value)
+        self.trend = try container.decode(TrendDirection.self, forKey: .trend)
+        
+        let dateString = try container.decode(String.self, forKey: .date)
+        self.date = Date(timeIntervalSince1970: Double(dateString) ?? 0)
+    }
 }
