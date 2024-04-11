@@ -41,10 +41,22 @@ public class DexcomClient {
     ) async throws -> [GlucoseReading] {
         do {
             try validateSessionID()
-            return try await _getGlucoseReadings(duration: duration, maxCount: maxCount)
+            return try await _getGlucoseReadings(duration: duration, maxCount: maxCount).map {
+                GlucoseReading(
+                    value: $0.value,
+                    trend: $0.trend,
+                    date: $0.date
+                )
+            }
         } catch {
             try await createSession()
-            return try await _getGlucoseReadings(duration: duration, maxCount: maxCount)
+            return try await _getGlucoseReadings(duration: duration, maxCount: maxCount).map {
+                GlucoseReading(
+                    value: $0.value,
+                    trend: $0.trend,
+                    date: $0.date
+                )
+            }
         }
     }
 
@@ -139,7 +151,7 @@ public class DexcomClient {
     private func _getGlucoseReadings(
         duration: Measurement<UnitDuration>,
         maxCount: Int
-    ) async throws -> [GlucoseReading] {
+    ) async throws -> [_GlucoseReading] {
         try await post(
             endpoint: .readingsEndpoint,
             params: [
