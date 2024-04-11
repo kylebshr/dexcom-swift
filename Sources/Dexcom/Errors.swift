@@ -16,7 +16,7 @@ public enum ErrorCode: String, Codable {
 }
 
 public struct DexcomError: Codable, Error {
-    public var code: ErrorCode
+    public var code: ErrorCode?
     public var message: String?
 
     enum CodingKeys: String, CodingKey {
