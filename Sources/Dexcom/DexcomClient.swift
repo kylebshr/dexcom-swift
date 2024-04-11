@@ -7,6 +7,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 enum DexcomClientError: Error {
     case failedToBuildURL
     case noAccountID
@@ -57,7 +61,7 @@ public class DexcomClient {
         params: [String: String]? = nil,
         body: Body?
     ) async throws -> Response {
-        let url = baseURL.appending(path: endpoint)
+        let url = baseURL.appendingPathComponent(endpoint)
 
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             throw DexcomClientError.failedToBuildURL
