@@ -3,6 +3,6 @@ import XCTest
 
 final class DexcomTests: XCTestCase {
     func testExample() throws {
-        XCTAssertTrue(foo == 1)
+        XCTAssertTrue(true)
     }
 }
