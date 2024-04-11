@@ -84,7 +84,7 @@ public class DexcomClient {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
-        let (data, _) = try await URLSession.shared.data(for: request)
+        let (data, _) = try await URLSession.shared.asyncData(for: request)
         
         do {
             return try JSONDecoder().decode(Response.self, from: data)
@@ -146,5 +146,21 @@ public class DexcomClient {
                 "maxCount": String(maxCount),
             ]
         )
+    }
+}
+
+private extension URLSession {
+    func asyncData(for request: URLRequest) async throws -> (Data, URLResponse) {
+        try await withCheckedThrowingContinuation { continuation in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error {
+                    return continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: (data!, response!))
+                }
+            }
+
+            task.resume()
+        }
     }
 }
