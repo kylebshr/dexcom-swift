@@ -88,10 +88,6 @@ public class DexcomClient {
 
         let (data, _) = try await URLSession.shared.asyncData(for: request)
 
-        print(String(data: request.httpBody!, encoding: .utf8) ?? "")
-        dump(request)
-        print(String(data: data, encoding: .utf8) ?? "")
-
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {
