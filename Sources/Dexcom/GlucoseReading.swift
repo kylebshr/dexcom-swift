@@ -25,6 +25,6 @@ public struct GlucoseReading: Codable {
         
         let dateString = try container.decode(String.self, forKey: .date)
             .trimmingCharacters(in: .decimalDigits.inverted)
-        self.date = Date(timeIntervalSince1970: Double(dateString) ?? 0)
+        self.date = Date(timeIntervalSince1970: (Double(dateString) ?? 0) / 1000.0)
     }
 }
