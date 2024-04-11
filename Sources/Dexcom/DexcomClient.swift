@@ -79,13 +79,14 @@ public class DexcomClient {
 
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept-Encoding")
+        request.httpMethod = "POST"
 
         if let body {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
         let (data, _) = try await URLSession.shared.asyncData(for: request)
-        
+
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {
