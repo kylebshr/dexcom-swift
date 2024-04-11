@@ -24,6 +24,7 @@ public struct GlucoseReading: Codable {
         self.trend = try container.decode(TrendDirection.self, forKey: .trend)
         
         let dateString = try container.decode(String.self, forKey: .date)
+            .trimmingCharacters(in: .decimalDigits.inverted)
         self.date = Date(timeIntervalSince1970: Double(dateString) ?? 0)
     }
 }
