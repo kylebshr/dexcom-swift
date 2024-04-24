@@ -17,7 +17,7 @@ enum DexcomClientError: Error {
     case noSessionID
 }
 
-protocol DexcomClientDelegate: AnyObject {
+public protocol DexcomClientDelegate: AnyObject {
     func didUpdateAccountID(_ accountID: UUID)
     func didUpdateSessionID(_ accountID: UUID)
 }
