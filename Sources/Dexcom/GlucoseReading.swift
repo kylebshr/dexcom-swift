@@ -11,6 +11,12 @@ public struct GlucoseReading: Codable {
     public var value: Int
     public var trend: TrendDirection
     public var date: Date
+
+    public init(value: Int, trend: TrendDirection, date: Date) {
+        self.value = value
+        self.trend = trend
+        self.date = date
+    }
 }
 
 struct _GlucoseReading: Codable {
