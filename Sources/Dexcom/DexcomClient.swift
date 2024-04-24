@@ -43,7 +43,7 @@ public class DexcomClient {
         }
     }
 
-    weak var delegate: DexcomClientDelegate?
+    public weak var delegate: DexcomClientDelegate?
 
     public init(
         username: String,
