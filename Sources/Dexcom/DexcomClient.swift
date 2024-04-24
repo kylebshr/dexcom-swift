@@ -38,7 +38,7 @@ public class DexcomClient {
     private var sessionID: UUID? {
         didSet {
             if let sessionID {
-                delegate?.didUpdateAccountID(sessionID)
+                delegate?.didUpdateSessionID(sessionID)
             }
         }
     }
