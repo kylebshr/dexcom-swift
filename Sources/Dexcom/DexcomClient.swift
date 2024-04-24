@@ -19,7 +19,7 @@ enum DexcomClientError: Error {
 
 public protocol DexcomClientDelegate: AnyObject {
     func didUpdateAccountID(_ accountID: UUID)
-    func didUpdateSessionID(_ accountID: UUID)
+    func didUpdateSessionID(_ sessionID: UUID)
 }
 
 public class DexcomClient {
