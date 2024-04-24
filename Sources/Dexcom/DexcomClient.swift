@@ -17,17 +17,39 @@ enum DexcomClientError: Error {
     case noSessionID
 }
 
+protocol DexcomClientDelegate: AnyObject {
+    func didUpdateAccountID(_ accountID: UUID)
+    func didUpdateSessionID(_ accountID: UUID)
+}
+
 public class DexcomClient {
     private let username: String
     private let password: String
     private let baseURL: URL
 
-    private var accountID: UUID?
-    private var sessionID: UUID?
+    private var accountID: UUID? {
+        didSet {
+            if let accountID {
+                delegate?.didUpdateAccountID(accountID)
+            }
+        }
+    }
+
+    private var sessionID: UUID? {
+        didSet {
+            if let sessionID {
+                delegate?.didUpdateAccountID(sessionID)
+            }
+        }
+    }
+
+    weak var delegate: DexcomClientDelegate?
 
     public init(
         username: String,
         password: String,
+        existingAccountID: UUID? = nil,
+        existingSessionID: UUID? = nil,
         outsideUS: Bool
     ) {
         self.username = username
