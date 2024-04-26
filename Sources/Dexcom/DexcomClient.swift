@@ -159,9 +159,14 @@ public class DexcomClient {
         )
     }
 
-    private func createSession() async throws {
-        accountID = try await getAccountID()
-        sessionID = try await getSessionID()
+    public func createSession() async throws -> (accountID: UUID, sessionID: UUID) {
+        let accountID = try await getAccountID()
+        let sessionID = try await getSessionID()
+
+        self.accountID = accountID
+        self.sessionID = sessionID
+
+        return (accountID, sessionID)
     }
 
     private func validateSessionID() throws {
