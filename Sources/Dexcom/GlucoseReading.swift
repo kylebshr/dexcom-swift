@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct GlucoseReading: Codable {
+public struct GlucoseReading: Codable, Hashable {
     public var value: Int
     public var trend: TrendDirection
     public var date: Date
