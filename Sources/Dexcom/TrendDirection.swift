@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TrendDirection: String, Codable {
+public enum TrendDirection: String, Codable, CaseIterable {
     case none = "None"
     case doubleUp = "DoubleUp"
     case singleUp = "SingleUp"
