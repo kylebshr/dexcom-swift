@@ -10,6 +10,7 @@ import Foundation
 extension URL {
     static let baseURL = URL(string: "https://share2.dexcom.com/ShareWebServices/Services")!
     static let baseURLOUS = URL(string: "https://shareous1.dexcom.com/ShareWebServices/Services")!
+    static let baseURLAPAC = URL(string: "https://share.dexcom.jp")!
 }
 
 extension String {
@@ -18,6 +19,7 @@ extension String {
     static let readingsEndpoint = "Publisher/ReadPublisherLatestGlucoseValues"
 
     static let dexcomAppID = "d89443d2-327c-4a6f-89e5-496bbb0317db"
+    static let dexcomAppIDAPAC = "d8665ade-9673-4e27-9ff6-92db4ce13d13"
 }
 
 extension Measurement<UnitDuration> {

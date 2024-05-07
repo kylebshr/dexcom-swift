@@ -25,7 +25,7 @@ public protocol DexcomClientDelegate: AnyObject {
 public class DexcomClient {
     private let username: String
     private let password: String
-    private let baseURL: URL
+    private let location: AccountLocation
 
     private var accountID: UUID? {
         didSet {
@@ -50,11 +50,11 @@ public class DexcomClient {
         password: String,
         existingAccountID: UUID? = nil,
         existingSessionID: UUID? = nil,
-        outsideUS: Bool
+        accountLocation: AccountLocation
     ) {
         self.username = username
         self.password = password
-        self.baseURL = outsideUS ? .baseURLOUS : .baseURL
+        self.location = accountLocation
     }
 
     public func getGlucoseReadings(
@@ -71,7 +71,7 @@ public class DexcomClient {
                 )
             }
         } catch {
-            try await createSession()
+            _ = try await createSession()
             return try await _getGlucoseReadings(duration: duration, maxCount: maxCount).map {
                 GlucoseReading(
                     value: $0.value,
@@ -95,7 +95,7 @@ public class DexcomClient {
         params: [String: String]? = nil,
         body: Body?
     ) async throws -> Response {
-        let url = baseURL.appendingPathComponent(endpoint)
+        let url = location.url.appendingPathComponent(endpoint)
 
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             throw DexcomClientError.failedToBuildURL
@@ -139,7 +139,7 @@ public class DexcomClient {
             body: GetAccountIDParams(
                 accountName: username,
                 password: password,
-                applicationId: .dexcomAppID
+                applicationId: location.appID
             )
         )
     }
@@ -154,7 +154,7 @@ public class DexcomClient {
             body: GetSessionIDParams(
                 accountId: accountID,
                 password: password,
-                applicationId: .dexcomAppID
+                applicationId: location.appID
             )
         )
     }
