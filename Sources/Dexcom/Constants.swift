@@ -29,3 +29,7 @@ extension Measurement<UnitDuration> {
 extension Int {
     public static let maxGlucoseCount = Int(Measurement.maxGlucoseDuration.converted(to: .minutes).value / 5)
 }
+
+extension Double {
+    static let mmolConversionFactor: Double = 0.0555
+}
