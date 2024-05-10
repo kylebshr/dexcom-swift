@@ -19,12 +19,12 @@ public struct GlucoseFormatter: FormatStyle {
         self.unit = unit
     }
 
-    public func format(_ value: Double) -> String {
+    public func format(_ value: Int) -> String {
         switch unit {
         case .mgdl:
             value.formatted(.number.precision(.fractionLength(0)))
         case .mmolL:
-            (value * .mmolConversionFactor).formatted(.number.precision(.fractionLength(1)))
+            (Double(value) * .mmolConversionFactor).formatted(.number.precision(.fractionLength(1)))
         }
     }
 }
