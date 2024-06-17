@@ -10,7 +10,7 @@ import Foundation
 extension URL {
     static let baseURL = URL(string: "https://share2.dexcom.com/ShareWebServices/Services")!
     static let baseURLOUS = URL(string: "https://shareous1.dexcom.com/ShareWebServices/Services")!
-    static let baseURLAPAC = URL(string: "https://share.dexcom.jp")!
+    static let baseURLAPAC = URL(string: "https://share.dexcom.jp/ShareWebServices/Services")!
 }
 
 extension String {
