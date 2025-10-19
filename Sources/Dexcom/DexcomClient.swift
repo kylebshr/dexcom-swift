@@ -15,6 +15,7 @@ enum DexcomClientError: Error {
     case failedToBuildURL
     case noAccountID
     case noSessionID
+    case noUsernameOrPassword
 }
 
 public protocol DexcomClientDelegate: AnyObject {
@@ -23,8 +24,8 @@ public protocol DexcomClientDelegate: AnyObject {
 }
 
 public class DexcomClient {
-    private let username: String
-    private let password: String
+    private let username: String?
+    private let password: String?
     private let location: AccountLocation
 
     private var accountID: UUID? {
@@ -46,8 +47,8 @@ public class DexcomClient {
     public weak var delegate: DexcomClientDelegate?
 
     public init(
-        username: String,
-        password: String,
+        username: String?,
+        password: String?,
         existingAccountID: UUID? = nil,
         existingSessionID: UUID? = nil,
         accountLocation: AccountLocation
@@ -55,6 +56,8 @@ public class DexcomClient {
         self.username = username
         self.password = password
         self.location = accountLocation
+        self.accountID = existingAccountID
+        self.sessionID = existingSessionID
     }
 
     public func getGlucoseReadings(
@@ -134,7 +137,11 @@ public class DexcomClient {
     }
 
     private func getAccountID() async throws -> UUID {
-        try await post(
+        guard let username, let password else {
+            throw DexcomClientError.noUsernameOrPassword
+        }
+
+        return try await post(
             endpoint: .authenticateEndpoint,
             body: GetAccountIDParams(
                 accountName: username,
@@ -147,6 +154,10 @@ public class DexcomClient {
     private func getSessionID() async throws -> UUID {
         guard let accountID else {
             throw DexcomClientError.noAccountID
+        }
+
+        guard let password else {
+            throw DexcomClientError.noUsernameOrPassword
         }
 
         return try await post(
