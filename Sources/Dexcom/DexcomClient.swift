@@ -11,7 +11,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-enum DexcomClientError: Error {
+public enum DexcomClientError: Error {
     case failedToBuildURL
     case noAccountID
     case noSessionID
