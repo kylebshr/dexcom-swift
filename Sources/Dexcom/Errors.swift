@@ -24,3 +24,9 @@ public struct DexcomError: Codable, Error {
         case message = "Message"
     }
 }
+
+public struct DexcomDecodingError: Error {
+    var error: Error
+    var body: Data
+    var response: URLResponse
+}

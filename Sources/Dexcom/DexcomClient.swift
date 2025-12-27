@@ -123,12 +123,16 @@ public class DexcomClient {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
-        let (data, _) = try await URLSession.shared.asyncData(for: request)
+        let (data, response) = try await URLSession.shared.asyncData(for: request)
 
         do {
             return try JSONDecoder().decode(Response.self, from: data)
-        } catch {
-            throw try JSONDecoder().decode(DexcomError.self, from: data)
+        } catch let decodingError {
+            if let dexcomError = try? JSONDecoder().decode(DexcomError.self, from: data) {
+                throw dexcomError
+            }
+
+            throw DexcomDecodingError(error: decodingError, body: data, response: response)
         }
     }
 
