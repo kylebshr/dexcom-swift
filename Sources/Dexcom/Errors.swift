@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FoundationNetworking
 
 public enum ErrorCode: String, Codable {
     case sessionIdNotFound = "SessionIdNotFound"
