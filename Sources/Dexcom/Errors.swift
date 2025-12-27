@@ -26,7 +26,7 @@ public struct DexcomError: Codable, Error {
 }
 
 public struct DexcomDecodingError: Error {
-    var error: Error
-    var body: Data
-    var response: URLResponse
+    public var error: Error
+    public var body: Data
+    public var response: URLResponse
 }
