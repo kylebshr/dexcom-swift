@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct GlucoseFormatter: FormatStyle {
-    public enum Unit: Codable {
+public struct GlucoseFormatter: FormatStyle, Sendable {
+    public enum Unit: Codable, Sendable {
         case mgdl
         case mmolL
     }

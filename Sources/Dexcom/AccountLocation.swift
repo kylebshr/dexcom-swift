@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum AccountLocation: String, Codable {
+public enum AccountLocation: String, Codable, Sendable {
     case usa
     case apac
     case worldwide

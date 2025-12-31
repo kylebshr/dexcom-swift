@@ -10,7 +10,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-public enum ErrorCode: String, Codable {
+public enum ErrorCode: String, Codable, Sendable {
     case sessionIdNotFound = "SessionIdNotFound"
     case sessionNotValid = "SessionNotValid"
     case accountPasswordInvalid = "AccountPasswordInvalid"
@@ -18,7 +18,7 @@ public enum ErrorCode: String, Codable {
     case invalidArgument = "InvalidArgument"
 }
 
-public struct DexcomError: Codable, Error {
+public struct DexcomError: Codable, Error, Sendable {
     public var code: ErrorCode?
     public var message: String?
 
@@ -28,8 +28,16 @@ public struct DexcomError: Codable, Error {
     }
 }
 
-public struct DexcomDecodingError: Error {
-    public var error: Error
+public struct DexcomDecodingError: Error, Sendable {
+    public var errorDescription: String
     public var body: Data
-    public var response: URLResponse
+    public var statusCode: Int?
+    public var url: URL?
+
+    init(error: any Error, body: Data, response: URLResponse) {
+        self.errorDescription = String(describing: error)
+        self.body = body
+        self.statusCode = (response as? HTTPURLResponse)?.statusCode
+        self.url = response.url
+    }
 }

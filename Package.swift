@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -16,11 +16,17 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Dexcom"
+            name: "Dexcom",
+            swiftSettings: [
+                .swiftLanguageMode(.v6),
+            ]
         ),
         .testTarget(
             name: "DexcomTests",
-            dependencies: ["Dexcom"]
+            dependencies: ["Dexcom"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6),
+            ]
         ),
     ]
 )

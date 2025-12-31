@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct GlucoseReading: Codable, Hashable {
+public struct GlucoseReading: Codable, Hashable, Sendable {
     public var value: Int
     public var trend: TrendDirection
     public var date: Date
@@ -19,7 +19,7 @@ public struct GlucoseReading: Codable, Hashable {
     }
 }
 
-struct _GlucoseReading: Codable {
+struct _GlucoseReading: Codable, Sendable {
     var value: Int
     var trend: TrendDirection
     var date: Date

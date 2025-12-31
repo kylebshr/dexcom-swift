@@ -11,7 +11,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-public enum DexcomClientError: Error {
+public enum DexcomClientError: Error, Sendable {
     case failedToBuildURL
     case noAccountID
     case noSessionID
@@ -23,26 +23,13 @@ public protocol DexcomClientDelegate: AnyObject {
     func didUpdateSessionID(_ sessionID: UUID)
 }
 
-public class DexcomClient {
+public actor DexcomClient {
     private let username: String?
     private let password: String?
     private let location: AccountLocation
 
-    private var accountID: UUID? {
-        didSet {
-            if let accountID {
-                delegate?.didUpdateAccountID(accountID)
-            }
-        }
-    }
-
-    private var sessionID: UUID? {
-        didSet {
-            if let sessionID {
-                delegate?.didUpdateSessionID(sessionID)
-            }
-        }
-    }
+    private var accountID: UUID?
+    private var sessionID: UUID?
 
     public weak var delegate: DexcomClientDelegate?
 
@@ -93,7 +80,7 @@ public class DexcomClient {
         try await getGlucoseReadings(duration: .init(value: 10, unit: .minutes), maxCount: 1).last
     }
 
-    private func post<Body: Encodable, Response: Decodable>(
+    private func post<Body: Encodable & Sendable, Response: Decodable & Sendable>(
         endpoint: String,
         params: [String: String]? = nil,
         body: Body?
@@ -123,7 +110,7 @@ public class DexcomClient {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
-        let (data, response) = try await URLSession.shared.asyncData(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request)
 
         do {
             return try JSONDecoder().decode(Response.self, from: data)
@@ -136,7 +123,7 @@ public class DexcomClient {
         }
     }
 
-    private func post<Response: Decodable>(endpoint: String, params: [String: String]? = nil) async throws -> Response {
+    private func post<Response: Decodable & Sendable>(endpoint: String, params: [String: String]? = nil) async throws -> Response {
         try await post(endpoint: endpoint, params: params, body: Optional<String>.none)
     }
 
@@ -177,9 +164,11 @@ public class DexcomClient {
     public func createSession() async throws -> (accountID: UUID, sessionID: UUID) {
         let accountID = try await getAccountID()
         self.accountID = accountID
+        delegate?.didUpdateAccountID(accountID)
 
         let sessionID = try await getSessionID()
         self.sessionID = sessionID
+        delegate?.didUpdateSessionID(sessionID)
 
         return (accountID, sessionID)
     }
@@ -203,20 +192,5 @@ public class DexcomClient {
             ]
         )
     }
-}
 
-private extension URLSession {
-    func asyncData(for request: URLRequest) async throws -> (Data, URLResponse) {
-        try await withCheckedThrowingContinuation { continuation in
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error {
-                    return continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: (data!, response!))
-                }
-            }
-
-            task.resume()
-        }
-    }
 }

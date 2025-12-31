@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct GetAccountIDParams: Codable {
+struct GetAccountIDParams: Codable, Sendable {
     var accountName: String
     var password: String
     var applicationId: String
 }
 
-struct GetSessionIDParams: Codable {
+struct GetSessionIDParams: Codable, Sendable {
     var accountId: UUID
     var password: String
     var applicationId: String
