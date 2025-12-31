@@ -33,6 +33,10 @@ public actor DexcomClient {
 
     public weak var delegate: DexcomClientDelegate?
 
+    public func setDelegate(_ delegate: DexcomClientDelegate?) {
+        self.delegate = delegate
+    }
+
     public init(
         username: String?,
         password: String?,
