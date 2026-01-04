@@ -18,7 +18,7 @@ public enum DexcomClientError: Error, Sendable {
     case noUsernameOrPassword
 }
 
-public protocol DexcomClientDelegate: AnyObject {
+public protocol DexcomClientDelegate: AnyObject, Sendable {
     func didUpdateAccountID(_ accountID: UUID)
     func didUpdateSessionID(_ sessionID: UUID)
 }
@@ -32,10 +32,6 @@ public protocol DexcomClientDelegate: AnyObject {
     private var sessionID: UUID?
 
     public weak var delegate: DexcomClientDelegate?
-
-    public func setDelegate(_ delegate: DexcomClientDelegate?) {
-        self.delegate = delegate
-    }
 
     public init(
         username: String?,
@@ -196,5 +192,4 @@ public protocol DexcomClientDelegate: AnyObject {
             ]
         )
     }
-
 }
