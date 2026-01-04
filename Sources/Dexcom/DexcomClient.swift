@@ -23,7 +23,7 @@ public protocol DexcomClientDelegate: AnyObject, Sendable {
     func didUpdateSessionID(_ sessionID: UUID)
 }
 
-@MainActor public class DexcomClient {
+public actor DexcomClient {
     private let username: String?
     private let password: String?
     private let location: AccountLocation
