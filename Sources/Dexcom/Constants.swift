@@ -28,6 +28,14 @@ extension Measurement<UnitDuration> {
 
 extension Int {
     public static let maxGlucoseCount = Int(Measurement.maxGlucoseDuration.converted(to: .minutes).value / 5)
+
+    /// Sentinel value reported by the Share API for a reading below the
+    /// sensor's measurable range (40–400 mg/dL). Displayed as "Low".
+    static let lowestGlucoseValue = 39
+
+    /// Sentinel value reported by the Share API for a reading above the
+    /// sensor's measurable range (40–400 mg/dL). Displayed as "Hi".
+    static let highestGlucoseValue = 401
 }
 
 extension Double {
