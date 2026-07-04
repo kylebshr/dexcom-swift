@@ -120,7 +120,8 @@ public actor DexcomClient {
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch let decodingError {
-            if let dexcomError = try? JSONDecoder().decode(DexcomError.self, from: data) {
+            if var dexcomError = try? JSONDecoder().decode(DexcomError.self, from: data) {
+                dexcomError.httpResponse = DexcomHTTPResponse(response: response)
                 throw dexcomError
             }
 
